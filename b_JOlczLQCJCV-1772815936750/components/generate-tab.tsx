@@ -7,13 +7,22 @@ import { cn } from '@/lib/utils'
 import ResultCard from '@/components/ui/ResultCard'
 import type { SavedItem, Difficulty } from '@/lib/types'
 
-export default function GenerateTab() {
+export function GenerateTab({
+  onSave,
+  savedIds,
+  onToastJump,
+  isJumping,
+}: {
+  onSave: (item: SavedItem) => void
+  savedIds: Set<string>
+  onToastJump: () => void
+  isJumping: boolean
+}) {
   const [word, setWord] = useState('')
   const [selectedDifficulties, setSelectedDifficulties] = useState<Difficulty[]>(['N5'])
   const [selectedThemes, setSelectedThemes] = useState<SavedItem['theme'][]>([])
   const [results, setResults] = useState<SavedItem[]>([])
   const [loading, setLoading] = useState(false)
-  const [justSavedIds, setJustSavedIds] = useState<Set<string>>(new Set())
   const [hasGenerated, setHasGenerated] = useState(false)
 
   const toggleDifficulty = (d: Difficulty) => {
@@ -58,13 +67,6 @@ ${levelText || '不限'}
 【使用者选择的主题】
 ${domainText || '不限'}
 
-【难度逻辑】
-- 使用者若选择多个难度，请将「最低难度」视为主要难度。
-- 主要难度 × 每个主题：请生成 2–3 句例句。
-- 若使用者也选择了更高难度，请对每个主题也生成 2–3 句更高难度的例句。
-- 最后请额外生成 1 句「更高难度示范句」，难度比使用者最高难度再高一级。
-
-【输出格式】
 请务必只输出 JSON 数组，不要加入任何额外说明。
       `
 
@@ -93,10 +95,6 @@ ${domainText || '不限'}
 
     setLoading(false)
     setHasGenerated(true)
-  }
-
-  const handleSave = (item: SavedItem) => {
-    setJustSavedIds((prev) => new Set(prev).add(item.id))
   }
 
   return (
@@ -160,9 +158,12 @@ ${domainText || '不限'}
           <ResultCard
             key={item.id}
             item={item}
-            isSaved={justSavedIds.has(item.id)}
-            justSaved={justSavedIds.has(item.id)}
-            onSave={handleSave}
+            isSaved={savedIds.has(item.word)}
+            justSaved={false}
+            onSave={(i) => {
+              onSave(i)
+              onToastJump()
+            }}
           />
         ))}
 
