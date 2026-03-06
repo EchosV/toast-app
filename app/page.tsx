@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { cn } from '@/lib/utils'
-import { BottomNav, type TabName } from '../components/bottom-nav'
-import { HomeTab } from '../components/home-tab'
-import { GenerateTab } from '../components/generate-tab'
-import { LibraryTab } from '../components/library-tab'
-import { QuizTab } from '../components/quiz-tab'
-import { AnalysisTab } from '../components/analysis-tab'
+import { BottomNav, type TabName } from '@/components/bottom-nav'
+import { HomeTab } from '@/components/home-tab'
+import { GenerateTab } from '@/components/generate-tab'
+import { LibraryTab } from '@/components/library-tab'
+import { QuizTab } from '@/components/quiz-tab'
+import { AnalysisTab } from '@/components/analysis-tab'
 import { loadLibrary, saveToLibrary, type SavedItem } from '@/lib/types'
 
 // View includes all nav tabs + an inner 'generate' view reachable from Home
